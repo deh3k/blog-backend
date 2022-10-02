@@ -13,7 +13,7 @@ class AuthController {
 
       const authData = await authService.register(email, password, nickname)
 
-      res.cookie('refreshToken', authData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+      // res.cookie('refreshToken', authData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
       return res.json(authData.data)
     } catch (error) {
       next(error)
@@ -26,36 +26,48 @@ class AuthController {
 
       const authData = await authService.login(email, password)
 
-      res.cookie('refreshToken', authData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+      // res.cookie('refreshToken', authData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
       return res.json(authData.data)
     } catch (error) {
       next(error)
     }
   }
 
-  async logout(req, res, next) {
-    try {
-      const { refreshToken } = req.cookies
+  // async logout(req, res, next) {
+  //   try {
+  //     const { refreshToken } = req.cookies
 
-      const token = await authService.logout(refreshToken)
+  //     const token = await authService.logout(refreshToken)
       
-      res.clearCookie('refreshToken')
-      return res.json({token})
-    } catch (error) {
-      next(error)
-    }
-  }
+  //     res.clearCookie('refreshToken')
+  //     return res.json({token})
+  //   } catch (error) {
+  //     next(error)
+  //   }
+  // }
 
-  async refresh(req, res, next) {
+  // async refresh(req, res, next) {
+  //   try {
+  //     const { refreshToken } = req.cookies
+
+  //     const authData = await authService.refresh(refreshToken)
+
+  //     res.cookie('refreshToken', authData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+  //     return res.json(authData.data)
+  //   } catch (error) {
+  //     res.clearCookie('refreshToken')
+  //     next(error)
+  //   }
+  // }
+
+  async authMe(req, res, next) {
     try {
-      const { refreshToken } = req.cookies
-      
-      const authData = await authService.refresh(refreshToken)
+      const userId = req.user._id
 
-      res.cookie('refreshToken', authData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+      const authData = await authService.authMe(userId)
+
       return res.json(authData.data)
     } catch (error) {
-      res.clearCookie('refreshToken')
       next(error)
     }
   }

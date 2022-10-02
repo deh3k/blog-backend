@@ -2,7 +2,7 @@ import userModel from "../models/user-model.js"
 import createHttpError from "http-errors"
 import * as bcrypt from 'bcrypt'
 import tokenService from "../service/token-service.js"
-import tokenModel from "../models/token-model.js"
+import mongoose from 'mongoose'
 import { UserDto } from "../dtos/UserDto.js"
 
 
@@ -59,18 +59,32 @@ class AuthService {
     return { ...token._doc }
   }
 
-  async refresh(refreshToken) {
-    const userData = tokenService.valideRefreshToken(refreshToken)
-    const tokenFromDb = await tokenModel.findOne({ refreshToken })
+  // async refresh(refreshToken) {
+  //   const userData = tokenService.valideRefreshToken(refreshToken)
+  //   const tokenFromDb = await tokenModel.findOne({ refreshToken })
 
-    if (!userData || !tokenFromDb) {
-      throw createHttpError(401, "You're not authorized")
+  //   if (!userData || !tokenFromDb) {
+  //     throw createHttpError(401, "You're not authorized")
+  //   }
+
+  //   const user = await userModel.findById(userData._id)
+  //   const authData = await authHandler(user)
+
+  //   return authData
+  // }
+
+  async authMe(userId) {
+    if (!mongoose.isValidObjectId(userId)) {
+      throw createHttpError(404, `User id ${userId} not found`)
     }
 
-    const user = await userModel.findById(userData._id)
-    const authData = await authHandler(user)
+    const user = await userModel.findById(userId)
 
-    return authData
+    if(!user) {
+      throw createHttpError(404, `User id ${userId} not found`)
+    } 
+
+    return user
   }
 }
 
