@@ -64,9 +64,9 @@ class AuthController {
     try {
       const userId = req.user._id
 
-      const authData = await authService.authMe(userId)
+      const user = await authService.authMe(userId)
 
-      return res.json(authData.data)
+      return res.json(user)
     } catch (error) {
       next(error)
     }
