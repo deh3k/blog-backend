@@ -11,7 +11,7 @@ const router = new Router()
 router.use('/post', postRouter)
 router.use('/user', userRouter)
 router.use('/comment', commentRouter)
-router.use('/', authRouter)
+router.use('/auth', authRouter)
 router.use('/', fileRouter)
 
 export default router

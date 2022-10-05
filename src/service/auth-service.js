@@ -22,7 +22,9 @@ const authHandler = async (user) => {
 
 class AuthService {
   async register(email, password, nickname) {
-    const isEmailTaken = await userModel.findOne({ email })
+    const formatEmail = email.toLowerCase()
+
+    const isEmailTaken = await userModel.findOne({ formatEmail })
     const isNicknameTaken = await userModel.findOne({ nickname })
 
     if (isEmailTaken || isNicknameTaken) {
@@ -38,7 +40,9 @@ class AuthService {
   }
 
   async login(email, password) {
-    const user = await userModel.findOne({ email })
+    const formatEmail = email.toLowerCase()
+    
+    const user = await userModel.findOne({ formatEmail })
     if (!user) {
       throw createHttpError(400, `Wrong email or password`)
     }

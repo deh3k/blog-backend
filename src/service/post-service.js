@@ -109,46 +109,6 @@ class PostService {
     const post = await postModel.findByIdAndUpdate(postId, { title, tags, text, img, categories })
     return post
   }
-
-  async getByUserId(userId, page, limit, term, sort) {
-    if (!mongoose.isValidObjectId(userId)) {
-      throw createHttpError(404, `User id ${postId} not found`)
-    }
-    if (term) {
-      const totalCount = await postModel.find({ $text: { $search: term }, author: userId }).count()
-      const posts = await postModel
-        .find(
-          { $text: { $search: term }, author: userId },
-          { score: { $meta: "textScore" } }
-        )
-        .sort({ score: { $meta: "textScore" } })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .populate('author', '-password -email')
-      return { totalCount, posts }
-    }
-
-    else if (sort === 'views') {
-      const totalCount = await postModel.find({ author: userId }).count()
-      const posts = await postModel
-        .find({ author: userId })
-        .populate('author', '-password -email')
-        .sort({ 'viewsCount': -1 })
-        .skip((page - 1) * limit)
-        .limit(limit)
-
-      return { totalCount, posts }
-    }
-
-    const totalCount = await postModel.find({ author: userId }).count()
-    const posts = await postModel
-      .find({ author: userId })
-      .populate('author', '-password, -email')
-      .sort({ 'createdAt': -1 })
-      .skip((page - 1) * limit)
-      .limit(limit)
-    return { totalCount, posts }
-  }
 }
 
 export default new PostService()

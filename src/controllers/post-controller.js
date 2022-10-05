@@ -78,20 +78,6 @@ class PostController {
       next(error)
     }
   }
-
-  async getByUserId(req, res, next) {
-    try {
-      const { userId } = req.params
-      let { page=1, limit=2, term, sort='createdAt' } = req.query
-
-      const data = await postService.getByUserId(userId, page, limit, term, sort)
-
-      return res.json(data)
-
-    } catch (error) {
-      next(error)
-    }
-  }
 }
 
 export default new PostController()

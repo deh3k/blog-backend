@@ -1,5 +1,5 @@
 export class UserDto {
-  id;
+  _id;
   email;
   nickname;
   photo;

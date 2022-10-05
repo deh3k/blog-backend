@@ -58,7 +58,7 @@ class UserService {
   }
 
   async getOne(userId) {
-    const user = await userModel.findById(userId).select('nickname photo')
+    const user = await userModel.findById(userId).select('_id nickname photo')
     if (!user) {
       createHttpError(404, "User is not found")
     }
