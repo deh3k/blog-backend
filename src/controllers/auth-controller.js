@@ -11,7 +11,7 @@ class AuthController {
       
       const {email, password, nickname} = req.body
 
-      const authData = await authService.register(email, password, nickname)
+      const authData = await authService.register(email.toLowerCase(), password, nickname)
 
       // res.cookie('refreshToken', authData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
       return res.json(authData.data)
@@ -24,7 +24,7 @@ class AuthController {
     try {
       const {email, password} = req.body
 
-      const authData = await authService.login(email, password)
+      const authData = await authService.login(email.toLowerCase(), password)
 
       // res.cookie('refreshToken', authData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
       return res.json(authData.data)
